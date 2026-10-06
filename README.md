@@ -1,0 +1,1 @@
+# Teroka-Kata-Adjektif-Jarak
