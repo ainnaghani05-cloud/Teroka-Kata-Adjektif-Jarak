@@ -1,0 +1,1551 @@
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teroka Kata Adjektif Jarak Interaktif - Pendidikan Inklusif</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts (Fredoka & Comic Neue for friendly readable typography) -->
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&family=Comic+Neue:wght@400;700&display=swap" rel="stylesheet">
+    <!-- Canvas Confetti -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'primary-blue': '#4D96FF',
+                        'primary-yellow': '#FFD93D',
+                        'primary-pink': '#FF6B6B',
+                        'primary-green': '#6BCB77',
+                        'bg-soft': '#F7F9FC',
+                    },
+                    fontFamily: {
+                        'fredoka': ['Fredoka', 'sans-serif'],
+                        'comic': ['Comic Neue', 'cursive', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body {
+            font-family: 'Fredoka', sans-serif;
+            background: radial-gradient(circle at 20px 20px, rgba(255,255,255,.75) 3px, transparent 4px) 0 0 / 44px 44px, linear-gradient(180deg, #FFF3B0 0%, #CDF3FF 45%, #FFD6EC 100%);
+            background-attachment: fixed;
+            touch-action: manipulation;
+        }
+
+        .btn-bounce:hover {
+            transform: scale(1.05);
+            transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .btn-bounce:active {
+            transform: scale(0.95);
+        }
+
+        /* Continuous Looping Animations for Inclusivity Visual Support */
+        @keyframes floatUpDown {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-14px) rotate(4deg); }
+        }
+
+        .animate-float {
+            animation: floatUpDown 2.5s ease-in-out infinite;
+        }
+
+        @keyframes pulseWiggle {
+            0%, 100% { transform: scale(1) rotate(-4deg); }
+            50% { transform: scale(1.15) rotate(4deg); }
+        }
+
+        .animate-wiggle {
+            animation: pulseWiggle 1.5s ease-in-out infinite;
+        }
+
+        @keyframes heartBeat {
+            0%, 100% { transform: scale(1); }
+            25% { transform: scale(1.2); }
+            50% { transform: scale(1); }
+            75% { transform: scale(1.15); }
+        }
+
+        .animate-heartbeat {
+            animation: heartBeat 1.8s infinite;
+        }
+
+        /* High contrast focus ring for inclusive accessibility */
+        *:focus-visible {
+            outline: 4px solid #FFD93D !important;
+            outline-offset: 2px;
+        }
+
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 8px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: #E2E8F0;
+            border-radius: 8px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #4D96FF;
+            border-radius: 8px;
+        }
+
+        .drop-target-active {
+            border-color: #FFD93D !important;
+            background-color: #FEF08A !important;
+            transform: scale(1.03);
+        }
+
+        /* Froggy Jump & Pond Animation Styles */
+        @keyframes frogJump {
+            0% { transform: translateY(0) scale(1); }
+            50% { transform: translateY(-40px) scale(1.2) rotate(-5deg); }
+            100% { transform: translateY(0) scale(1); }
+        }
+
+        .animate-frog-jump {
+            animation: frogJump 0.6s ease-in-out;
+        }
+
+        @keyframes leafFloat {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-6px); }
+        }
+
+        .animate-leaf-float {
+            animation: leafFloat 3s ease-in-out infinite;
+        }
+
+        /* Themed game stage backgrounds */
+        .stage-belon { background: linear-gradient(180deg, #4FC3F7 0%, #81D4FA 45%, #E1F5FE 85%); border-color: #FF8FB1 !important; }
+        .stage-katak { background: linear-gradient(180deg, #B3E5FC 0%, #E0F7FA 26%, #26C6DA 28%, #00ACC1 68%, #00838F 100%); border-color: #7CE08A !important; }
+        .stage-posmen { background: linear-gradient(180deg, #FF9A8B 0%, #FFB86B 35%, #FFE38A 70%, #FFF6C9 100%); border-color: #FFB020 !important; }
+
+        @keyframes cloudDrift { from { left: -15%; } to { left: 105%; } }
+        @keyframes cloudDriftRev { from { left: 105%; } to { left: -15%; } }
+        @keyframes bubbleUp {
+            0% { transform: translateY(0) scale(1); opacity: .85; }
+            100% { transform: translateY(-110px) scale(1.3); opacity: 0; }
+        }
+        .stage-item { position: absolute; line-height: 1; }
+    </style>
+</head>
+<body class="text-gray-800 min-h-screen flex flex-col justify-between selection:bg-yellow-300">
+
+    <!-- Navigation Bar -->
+    <header class="bg-gradient-to-r from-cyan-400 via-fuchsia-500 to-orange-400 text-white shadow-lg sticky top-0 z-50 border-b-4 border-yellow-300">
+        <div class="max-w-7xl mx-auto px-4 py-3 flex flex-wrap justify-between items-center">
+            <div class="flex items-center gap-3">
+                <div class="w-12 h-12 bg-yellow-400 rounded-full flex items-center justify-center text-blue-900 text-2xl font-bold shadow-md animate-bounce">
+                    📏
+                </div>
+                <div>
+                    <h1 class="text-xl md:text-2xl font-bold tracking-wide drop-shadow">Teroka Kata Adjektif Jarak</h1>
+                    <p class="text-xs md:text-sm text-yellow-100 font-comic font-bold drop-shadow">Pendidikan Inklusif Tahun 3 • Interaktif & Visual</p>
+                </div>
+            </div>
+
+            <!-- Global Action Controls -->
+            <div class="flex items-center gap-2 mt-2 md:mt-0">
+                <button onclick="openCaraBermainModal()" 
+                        class="bg-yellow-400 hover:bg-yellow-300 text-blue-900 font-bold px-3 py-2 rounded-xl text-sm flex items-center gap-2 shadow btn-bounce"
+                        aria-label="Cara Bermain">
+                    <i class="fa-solid fa-circle-question text-xl"></i>
+                    <span>Cara Bermain</span>
+                </button>
+                
+                <button onclick="switchTab('hub')" class="bg-white/20 hover:bg-white/30 text-white px-3 py-2 rounded-xl text-sm font-semibold flex items-center gap-1 btn-bounce">
+                    <i class="fa-solid fa-house"></i> Utama
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Dynamic Container -->
+    <main class="max-w-7xl mx-auto px-4 py-6 flex-grow w-full">
+
+        <!-- Navigation Hub Tabs -->
+        <nav class="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-6">
+            <button onclick="switchTab('nota')" id="tab-nota" class="tab-btn bg-gradient-to-b from-sky-400 to-blue-500 border-4 border-white hover:brightness-110 text-white font-bold p-3 rounded-2xl shadow-lg flex flex-col items-center gap-1 transition-all">
+                <i class="fa-solid fa-ruler-horizontal text-2xl text-white drop-shadow"></i>
+                <span>1. Nota & Animasi</span>
+            </button>
+            <button onclick="switchTab('games')" id="tab-games" class="tab-btn bg-gradient-to-b from-fuchsia-400 to-purple-500 border-4 border-white hover:brightness-110 text-white font-bold p-3 rounded-2xl shadow-lg flex flex-col items-center gap-1 transition-all">
+                <i class="fa-solid fa-gamepad text-2xl text-white drop-shadow"></i>
+                <span>2. Zon Permainan</span>
+            </button>
+            <button onclick="switchTab('kuiz')" id="tab-kuiz" class="tab-btn bg-gradient-to-b from-lime-400 to-green-500 border-4 border-white hover:brightness-110 text-white font-bold p-3 rounded-2xl shadow-lg flex flex-col items-center gap-1 transition-all">
+                <i class="fa-solid fa-star text-2xl text-white drop-shadow"></i>
+                <span>3. Kuiz Uji Diri</span>
+            </button>
+            <button onclick="switchTab('guru')" id="tab-guru" class="tab-btn bg-gradient-to-b from-pink-400 to-rose-500 border-4 border-white hover:brightness-110 text-white font-bold p-3 rounded-2xl shadow-lg flex flex-col items-center gap-1 transition-all">
+                <i class="fa-solid fa-heart text-2xl text-white drop-shadow"></i>
+                <span>4. Komen Guru</span>
+            </button>
+        </nav>
+
+        <!-- HUB LANDING PAGE -->
+        <section id="view-hub" class="space-y-6">
+            <div class="bg-gradient-to-br from-yellow-300 via-orange-300 to-pink-300 rounded-3xl p-6 md:p-10 shadow-xl border-4 border-white text-center relative overflow-hidden">
+                <div class="relative z-10 max-w-2xl mx-auto space-y-4">
+                    <span class="bg-white text-orange-600 font-bold px-4 py-1.5 rounded-full text-sm inline-block shadow">
+                        ✨ Khas Untuk Pendidikan Inklusif Tahun 3
+                    </span>
+                    <h2 class="text-3xl md:text-5xl font-black text-slate-800 leading-tight">
+                        Mari Meneroka <span class="text-blue-600 underline decoration-wavy decoration-yellow-400">Kata Adjektif Jarak</span>!
+                    </h2>
+                    <p class="text-base md:text-lg text-slate-700 font-comic">
+                        Kata adjektif jarak ialah <strong>perkataan yang menerangkan jarak atau kedudukan</strong> sesuatu tempat atau benda. Contohnya: <em>jauh, dekat, hampir, rapat, dan renggang</em>.
+                    </p>
+                    <div class="pt-4 flex flex-wrap justify-center gap-4">
+                        <button onclick="switchTab('nota')" class="bg-blue-600 hover:bg-blue-700 text-white font-bold text-lg px-8 py-4 rounded-2xl shadow-lg border-b-4 border-blue-800 btn-bounce flex items-center gap-3">
+                            <i class="fa-solid fa-play"></i> Jom Lihat Nota
+                        </button>
+                        <button onclick="switchTab('games')" class="bg-purple-600 hover:bg-purple-700 text-white font-bold text-lg px-8 py-4 rounded-2xl shadow-lg border-b-4 border-purple-800 btn-bounce flex items-center gap-3">
+                            <i class="fa-solid fa-gamepad"></i> Main Permainan Jarak!
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Quick Feature Cards -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div class="bg-gradient-to-br from-sky-200 to-cyan-100 p-6 rounded-2xl border-4 border-white shadow-md flex items-start gap-4">
+                    <div class="p-3 bg-blue-100 rounded-2xl text-blue-600 text-2xl">
+                        <i class="fa-solid fa-eye"></i>
+                    </div>
+                    <div>
+                        <h3 class="font-bold text-lg text-blue-900">Sokongan Visual Emoji</h3>
+                        <p class="text-sm text-gray-600 font-comic">Emoji bergerak secara berterusan untuk membantu pemahaman murid tentang jarak secara visual.</p>
+                    </div>
+                </div>
+                <div class="bg-gradient-to-br from-fuchsia-200 to-pink-100 p-6 rounded-2xl border-4 border-white shadow-md flex items-start gap-4">
+                    <div class="p-3 bg-purple-100 rounded-2xl text-purple-600 text-2xl">
+                        <i class="fa-solid fa-envelope"></i>
+                    </div>
+                    <div>
+                        <h3 class="font-bold text-lg text-purple-900">Permainan Teka Jarak</h3>
+                        <p class="text-sm text-gray-600 font-comic">Pilih kata adjektif jarak yang betul!</p>
+                    </div>
+                </div>
+                <div class="bg-gradient-to-br from-lime-200 to-yellow-100 p-6 rounded-2xl border-4 border-white shadow-md flex items-start gap-4">
+                    <div class="p-3 bg-green-100 rounded-2xl text-green-600 text-2xl">
+                        <i class="fa-solid fa-volume-high"></i>
+                    </div>
+                    <div>
+                        <h3 class="font-bold text-lg text-green-900">Audio & Kesan Bunyi</h3>
+                        <p class="text-sm text-gray-600 font-comic">Dilengkapi sebutan audio Bahasa Melayu, bunyi belon pop, dan maklum balas positif!</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- VIEW 1: NOTA & ANIMASI JARAK -->
+        <section id="view-nota" class="space-y-6 hidden">
+            <div class="relative overflow-hidden bg-gradient-to-br from-sky-100 via-white to-yellow-100 rounded-3xl p-6 shadow-lg border-4 border-sky-400">
+                <div class="absolute inset-0 pointer-events-none select-none overflow-hidden z-0" aria-hidden="true">
+                    <span class="absolute top-3 right-4 text-5xl opacity-50 animate-float">📏</span>
+                    <span class="absolute top-1/3 -right-2 text-4xl opacity-40 animate-wiggle">🧭</span>
+                    <span class="absolute bottom-4 right-6 text-5xl opacity-50 animate-float">🗺️</span>
+                    <span class="absolute bottom-3 left-4 text-4xl opacity-50 animate-wiggle">🚌</span>
+                    <span class="absolute top-2/3 -left-2 text-4xl opacity-40 animate-float">🏫</span>
+                    <span class="absolute top-3 left-1/2 text-3xl opacity-40 animate-wiggle">📍</span>
+                </div>
+                <div class="relative z-10">
+                <div class="flex flex-wrap justify-between items-center gap-4 mb-6 pb-4 border-b">
+                    <div>
+                        <h2 class="text-2xl md:text-3xl font-extrabold text-blue-900 flex items-center gap-3">
+                            <i class="fa-solid fa-route text-yellow-500"></i> Apa Itu Kata Adjektif Jarak?
+                        </h2>
+                        <p class="text-gray-600 font-comic"> Perkataan yang menunjukkan atau menerangkan jarak antara satu tempat atau benda dengan tempat atau benda yang lain.</p>
+                    </div>
+                    <button onclick="speakText('Kata adjektif jarak ialah perkataan yang menerangkan jarak atau kedudukan sesuatu tempat atau benda. Contohnya: jauh, dekat, hampir, rapat, dan renggang.')" 
+                            class="bg-blue-100 hover:bg-blue-200 text-blue-800 px-4 py-2 rounded-xl text-sm font-bold flex items-center gap-2 border border-blue-300 btn-bounce">
+                        <i class="fa-solid fa-volume-high text-lg text-blue-600"></i> Bacakan Nota Ini
+                    </button>
+                </div>
+
+                <!-- Easy Notes Box -->
+                <div class="bg-yellow-50 border-2 border-yellow-300 rounded-2xl p-4 mb-8 text-center sm:text-left flex flex-col sm:flex-row items-center gap-4">
+                    <div class="w-16 h-16 bg-yellow-400 rounded-2xl flex items-center justify-center text-3xl text-white font-bold flex-shrink-0 animate-bounce">
+                        💡
+                    </div>
+                    <div>
+                        <h3 class="text-lg font-bold text-yellow-900">Panduan Mudah Ingat Murid Tahun 3:</h3>
+                        <p class="text-yellow-800 font-comic text-base">
+                            Kata adjektif jarak ialah <strong>perkataan yang menunjukkan jauh atau dekatnya</strong> sesuatu tempat atau benda!
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Jarak Scene: Rumah - Sekolah - Pantai -->
+                <div class="relative bg-gradient-to-b from-sky-300 via-sky-100 to-lime-200 rounded-3xl border-4 border-white shadow-md p-4 mb-8 overflow-hidden">
+                    <div class="absolute top-1 left-3 text-3xl animate-float opacity-80">☁️</div>
+                    <div class="absolute top-2 right-4 text-4xl animate-wiggle">☀️</div>
+                    <h3 class="text-center font-bold text-sky-900 mb-3 relative z-10">🗺️ Lihat Jarak Dari Rumah Ke Tempat Lain!</h3>
+                    <div class="flex items-end gap-1 md:gap-2 relative z-10">
+                        <div class="text-center"><div class="text-4xl md:text-6xl">🏠</div><div class="text-xs font-bold text-slate-700">Rumah</div></div>
+                        <div class="flex-1 text-center">
+                            <span class="text-xs bg-green-500 text-white rounded-full px-3 py-0.5 font-bold">Dekat</span>
+                            <div class="border-t-4 border-dashed border-green-600 mt-2"></div>
+                        </div>
+                        <div class="text-center"><div class="text-4xl md:text-6xl">🏫</div><div class="text-xs font-bold text-slate-700">Sekolah</div></div>
+                        <div class="flex-[3] text-center">
+                            <span class="text-xs bg-orange-500 text-white rounded-full px-3 py-0.5 font-bold">Jauh</span>
+                            <div class="border-t-4 border-dashed border-orange-600 mt-2"></div>
+                        </div>
+                        <div class="text-center"><div class="text-4xl md:text-6xl animate-float">🏖️</div><div class="text-xs font-bold text-slate-700">Pantai</div></div>
+                    </div>
+                </div>
+
+                <!-- Interactive Distance Category Buttons -->
+                <h3 class="text-xl font-bold text-gray-800 mb-4 flex items-center gap-2">
+                    <i class="fa-solid fa-hand-pointer text-blue-500"></i> Pilih Jenis Jarak Untuk Lihat Maksud & Contoh Ayat:
+                </h3>
+
+                <!-- Distance Buttons -->
+                <div class="flex flex-wrap gap-2 md:gap-3 mb-6">
+                    <button onclick="showJarakCategory('jauhdekat')" id="btn-jarak-jauhdekat" class="emo-tab-btn bg-fuchsia-500 text-white font-bold px-4 py-3 rounded-xl shadow flex items-center gap-2 btn-bounce">
+                        🏠 Jauh, Dekat & Hampir
+                    </button>
+                    <button onclick="showJarakCategory('rapat')" id="btn-jarak-rapat" class="emo-tab-btn bg-gray-200 text-gray-700 font-bold px-4 py-3 rounded-xl hover:bg-gray-300 flex items-center gap-2 btn-bounce">
+                        👫 Rapat & Renggang
+                    </button>
+                </div>
+
+                <!-- CATEGORY 1: JAUHDEKAT -->
+                <div id="jarak-jauhdekat" class="emo-box bg-gradient-to-r from-orange-100 to-yellow-100 rounded-3xl p-6 border-4 border-orange-300">
+                    <div class="flex justify-between items-center mb-4">
+                        <h4 class="text-xl font-bold text-orange-900">🏠 Kategori: Jauh, Dekat & Hampir</h4>
+                        <span class="text-sm bg-orange-200 text-orange-900 px-3 py-1 rounded-full font-bold">Tekan kad untuk mendengar audio!</span>
+                    </div>
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                        <div onclick="playJarakAnimation('Jauh', 'Jarak yang panjang dari satu tempat ke tempat lain.', '🏔️')" class="cursor-pointer bg-white p-5 rounded-2xl shadow-md border-4 border-orange-200 text-center hover:border-orange-500 btn-bounce space-y-2">
+                            <div class="text-6xl animate-float">🏔️</div>
+                            <h5 class="text-2xl font-black text-orange-600">Jauh</h5>
+                            <p class="text-xs text-gray-600 font-comic"><strong>Maksud:</strong> Jarak yang panjang dan memerlukan masa yang lama untuk sampai.</p>
+                            <p class="text-xs text-gray-500 font-comic">"Rumah nenek Aina sangat <strong>jauh</strong> dari bandar."</p>
+                            <button class="bg-orange-100 text-orange-700 text-xs font-bold px-3 py-1 rounded-full">🔊 Dengar Sebutan</button>
+                        </div>
+                        <div onclick="playJarakAnimation('Dekat', 'Jarak yang pendek dan tidak jauh.', '🏠')" class="cursor-pointer bg-white p-5 rounded-2xl shadow-md border-4 border-orange-200 text-center hover:border-orange-500 btn-bounce space-y-2">
+                            <div class="text-6xl animate-wiggle">🏠</div>
+                            <h5 class="text-2xl font-black text-orange-600">Dekat</h5>
+                            <p class="text-xs text-gray-600 font-comic"><strong>Maksud:</strong> Jarak yang pendek dan tidak jauh.</p>
+                            <p class="text-xs text-gray-500 font-comic">"Rumah Hafiz <strong>dekat</strong> dengan sekolah."</p>
+                            <button class="bg-orange-100 text-orange-700 text-xs font-bold px-3 py-1 rounded-full">🔊 Dengar Sebutan</button>
+                        </div>
+                        <div onclick="playJarakAnimation('Hampir', 'Jarak yang tinggal sedikit sahaja lagi untuk sampai.', '🏁')" class="cursor-pointer bg-white p-5 rounded-2xl shadow-md border-4 border-orange-200 text-center hover:border-orange-500 btn-bounce space-y-2">
+                            <div class="text-6xl animate-pulse">🏁</div>
+                            <h5 class="text-2xl font-black text-orange-600">Hampir</h5>
+                            <p class="text-xs text-gray-600 font-comic"><strong>Maksud:</strong> Jarak yang tinggal sedikit sahaja lagi untuk sampai.</p>
+                            <p class="text-xs text-gray-500 font-comic">"Ali sudah <strong>hampir</strong> sampai ke garisan penamat."</p>
+                            <button class="bg-orange-100 text-orange-700 text-xs font-bold px-3 py-1 rounded-full">🔊 Dengar Sebutan</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- CATEGORY 2: RAPAT -->
+                <div id="jarak-rapat" class="emo-box bg-gradient-to-r from-pink-100 to-fuchsia-100 rounded-3xl p-6 border-4 border-fuchsia-300 hidden">
+                    <div class="flex justify-between items-center mb-4">
+                        <h4 class="text-xl font-bold text-fuchsia-900">👫 Kategori: Rapat & Renggang</h4>
+                        <span class="text-sm bg-fuchsia-200 text-fuchsia-900 px-3 py-1 rounded-full font-bold">Tekan kad untuk mendengar audio!</span>
+                    </div>
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                        <div onclick="playJarakAnimation('Rapat', 'Jarak yang sangat sempit antara satu benda dengan benda lain.', '👫')" class="cursor-pointer bg-white p-5 rounded-2xl shadow-md border-4 border-fuchsia-200 text-center hover:border-fuchsia-500 btn-bounce space-y-2">
+                            <div class="text-6xl animate-wiggle">👫</div>
+                            <h5 class="text-2xl font-black text-fuchsia-600">Rapat</h5>
+                            <p class="text-xs text-gray-600 font-comic"><strong>Maksud:</strong> Tiada jarak atau jaraknya sangat sempit.</p>
+                            <p class="text-xs text-gray-500 font-comic">"Murid-murid duduk <strong>rapat</strong> semasa mendengar cerita guru."</p>
+                            <button class="bg-fuchsia-100 text-fuchsia-700 text-xs font-bold px-3 py-1 rounded-full">🔊 Dengar Sebutan</button>
+                        </div>
+                        <div onclick="playJarakAnimation('Renggang', 'Jarak yang luas antara satu benda dengan benda lain.', '🌳')" class="cursor-pointer bg-white p-5 rounded-2xl shadow-md border-4 border-fuchsia-200 text-center hover:border-fuchsia-500 btn-bounce space-y-2">
+                            <div class="text-6xl animate-float">🌳</div>
+                            <h5 class="text-2xl font-black text-fuchsia-600">Renggang</h5>
+                            <p class="text-xs text-gray-600 font-comic"><strong>Maksud:</strong> Jarak yang luas antara satu benda dengan benda yang lain.</p>
+                            <p class="text-xs text-gray-500 font-comic">"Pokok-pokok getah itu ditanam <strong>renggang</strong> antara satu sama lain."</p>
+                            <button class="bg-fuchsia-100 text-fuchsia-700 text-xs font-bold px-3 py-1 rounded-full">🔊 Dengar Sebutan</button>
+                        </div>
+                        <div onclick="playJarakAnimation('Jarang', 'Ada banyak ruang di antara satu benda dengan benda lain.', '🌱')" class="cursor-pointer bg-white p-5 rounded-2xl shadow-md border-4 border-fuchsia-200 text-center hover:border-fuchsia-500 btn-bounce space-y-2">
+                            <div class="text-6xl animate-pulse">🌱</div>
+                            <h5 class="text-2xl font-black text-fuchsia-600">Jarang</h5>
+                            <p class="text-xs text-gray-600 font-comic"><strong>Maksud:</strong> Letaknya tidak rapat dan ada banyak ruang di antaranya.</p>
+                            <p class="text-xs text-gray-500 font-comic">"Anak-anak pokok itu ditanam <strong>jarang</strong> supaya ada ruang untuk membesar."</p>
+                            <button class="bg-fuchsia-100 text-fuchsia-700 text-xs font-bold px-3 py-1 rounded-full">🔊 Dengar Sebutan</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mt-8 text-center">
+                    <button onclick="switchTab('games')" class="bg-purple-600 hover:bg-purple-700 text-white font-bold px-8 py-3 rounded-2xl text-lg shadow-md btn-bounce inline-flex items-center gap-2">
+                        Anda sudah belajar? Jom Main Permainan Kata Adjektif Jarak! <i class="fa-solid fa-arrow-right"></i>
+                    </button>
+                </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- VIEW 2: GAME ZONE HUB & INTERACTIVE GAMES -->
+        <section id="view-games" class="space-y-6 hidden">
+            <div class="relative overflow-hidden bg-gradient-to-br from-fuchsia-100 via-white to-orange-100 rounded-3xl p-6 shadow-lg border-4 border-fuchsia-400">
+                <div class="absolute inset-0 pointer-events-none select-none overflow-hidden z-0" aria-hidden="true">
+                    <span class="absolute top-3 right-4 text-5xl opacity-50 animate-wiggle">🎮</span>
+                    <span class="absolute top-1/3 -right-2 text-4xl opacity-40 animate-float">🕹️</span>
+                    <span class="absolute bottom-4 right-6 text-5xl opacity-50 animate-float">🏆</span>
+                    <span class="absolute bottom-3 left-4 text-4xl opacity-50 animate-wiggle">🎈</span>
+                    <span class="absolute top-2/3 -left-2 text-4xl opacity-40 animate-float">🐸</span>
+                    <span class="absolute top-3 left-1/2 text-3xl opacity-40 animate-wiggle">📬</span>
+                </div>
+                <div class="relative z-10">
+                <div class="flex flex-wrap justify-between items-center mb-6 pb-4 border-b gap-2">
+                    <div>
+                        <h2 class="text-2xl md:text-3xl font-extrabold text-purple-900 flex items-center gap-3">
+                            <i class="fa-solid fa-gamepad text-purple-600"></i> Zon Permainan Interaktif Jarak
+                        </h2>
+                        <p class="text-gray-600 font-comic">Pilih permainan kata adjektif jarak di bawah dan kumpul markah!</p>
+                    </div>
+                    <div class="bg-purple-100 border border-purple-300 px-4 py-2 rounded-2xl flex items-center gap-3">
+                        <span class="text-purple-800 font-bold">Mata Kumpul:</span>
+                        <span id="global-score" class="text-2xl font-black text-purple-700">0</span>
+                        <i class="fa-solid fa-star text-yellow-400 text-xl"></i>
+                    </div>
+                </div>
+
+                <!-- Mini-Game Selection Menu -->
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+                    <button onclick="selectGame('belon')" id="btn-select-belon" class="game-select-btn bg-gradient-to-b from-pink-400 to-red-500 text-white p-5 rounded-2xl shadow-md text-left border-4 border-white hover:scale-105 transition-transform">
+                        <div class="flex justify-between items-center mb-2">
+                            <span class="text-3xl">🎈</span>
+                            <span class="text-xs bg-white/30 px-2 py-1 rounded-full uppercase font-bold">Permainan 1</span>
+                        </div>
+                        <h3 class="text-xl font-black">Pecah Belon Adjektif Jarak</h3>
+                        <p class="text-xs opacity-90 font-comic">Ketuk belon Kata Adjektif Jarak sahaja!</p>
+                    </button>
+
+                    <button onclick="selectGame('katak')" id="btn-select-katak" class="game-select-btn bg-gradient-to-b from-emerald-500 to-teal-700 text-white p-5 rounded-2xl shadow-md text-left border-4 border-white hover:scale-105 transition-transform">
+                        <div class="flex justify-between items-center mb-2">
+                            <span class="text-3xl">🐸</span>
+                            <span class="text-xs bg-white/30 px-2 py-1 rounded-full uppercase font-bold">Permainan 2</span>
+                        </div>
+                        <h3 class="text-xl font-black">Katak Melompat</h3>
+                        <p class="text-xs opacity-90 font-comic">Klik pada Kata Adjektif Jarak yang tepat!</p>
+                    </button>
+
+                    <button onclick="selectGame('posmen')" id="btn-select-posmen" class="game-select-btn bg-gradient-to-b from-blue-500 to-indigo-600 text-white p-5 rounded-2xl shadow-md text-left border-4 border-white hover:scale-105 transition-transform">
+                        <div class="flex justify-between items-center mb-2">
+                            <span class="text-3xl">📬</span>
+                            <span class="text-xs bg-white/30 px-2 py-1 rounded-full uppercase font-bold">Permainan 3</span>
+                        </div>
+                        <h3 class="text-xl font-black">Peti Teka Jarak</h3>
+                        <p class="text-xs opacity-90 font-comic">Pilih peti jarak yang betul!</p>
+                    </button>
+                </div>
+
+                <!-- GAME CONTAINER CANVAS AREA -->
+                <div id="game-stage" class="stage-belon rounded-3xl p-4 md:p-6 relative min-h-[460px] flex flex-col justify-between overflow-hidden shadow-inner border-4">
+                    <!-- Themed game background (diisi oleh JavaScript) -->
+                    <div id="stage-bg" class="absolute inset-0 z-0 pointer-events-none select-none overflow-hidden" aria-hidden="true"></div>
+                    
+                    <!-- Top Game Bar Header -->
+                    <div class="flex justify-between items-center bg-slate-900/70 backdrop-blur p-3 rounded-2xl text-white border border-slate-700 z-10">
+                        <div class="flex items-center gap-3">
+                            <span id="active-game-title" class="font-bold text-yellow-400 text-base md:text-lg">🎈 Pecah Belon Kata Adjektif Jarak</span>
+                        </div>
+                        <div class="flex items-center gap-4 text-sm font-bold">
+                            <div class="bg-emerald-800/80 px-3 py-1 rounded-xl border border-emerald-500 text-xs">🌱 Mod Santai (Tiada Masa)</div>
+                            <div>Markah: <span id="game-current-score" class="text-xl text-yellow-300 font-mono">0</span></div>
+                        </div>
+                    </div>
+
+                    <!-- GAME DISPLAY AREA -->
+                    <div id="game-playground" class="relative z-10 my-auto w-full min-h-[350px] flex items-center justify-center">
+                        <!-- Content dynamically injected via JavaScript -->
+                        <div class="text-center space-y-4 bg-slate-900/80 p-6 rounded-3xl border-2 border-yellow-400 max-w-md">
+                            <div class="text-6xl animate-bounce">🎮</div>
+                            <h3 class="text-2xl font-bold text-white">Sedia Untuk Bermain?</h3>
+                            <p class="text-slate-200 font-comic">Tekan butang di bawah untuk memulakan permainan!</p>
+                            <button onclick="startGame()" class="bg-yellow-400 hover:bg-yellow-300 text-slate-900 font-black text-xl px-8 py-3 rounded-2xl shadow-lg border-b-4 border-yellow-600 btn-bounce">
+                                🚀 MULA MAIN SEKARANG!
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Bottom Game Instruction - No Audio Buttons Here -->
+                    <div class="bg-slate-900/80 text-slate-200 text-xs md:text-sm p-3 rounded-xl border border-slate-700 flex justify-between items-center z-10">
+                        <span id="game-instruction"><i class="fa-solid fa-book-open text-yellow-400 mr-1"></i> Baca soalan dan pilih jawapan Kata Adjektif Jarak!</span>
+                        <span class="text-yellow-300 font-bold text-xs bg-slate-800 px-2 py-1 rounded-lg">Pendidikan Inklusif</span>
+                    </div>
+
+                </div>
+
+                </div>
+            </div>
+        </section>
+
+        <!-- VIEW 3: KUIZ PENGUKUHAN & UJI DIRI (BINA AYAT) -->
+        <section id="view-kuiz" class="space-y-6 hidden">
+            <div class="relative overflow-hidden bg-gradient-to-br from-lime-100 via-white to-yellow-100 rounded-3xl p-6 shadow-lg border-4 border-lime-400">
+                <div class="absolute inset-0 pointer-events-none select-none overflow-hidden z-0" aria-hidden="true">
+                    <span class="absolute top-3 right-4 text-5xl opacity-50 animate-wiggle">✏️</span>
+                    <span class="absolute top-1/3 -right-2 text-4xl opacity-40 animate-float">📚</span>
+                    <span class="absolute bottom-4 right-6 text-5xl opacity-50 animate-float">📝</span>
+                    <span class="absolute bottom-3 left-4 text-4xl opacity-50 animate-wiggle">🖍️</span>
+                    <span class="absolute top-2/3 -left-2 text-4xl opacity-40 animate-float">🎒</span>
+                    <span class="absolute top-3 left-1/2 text-3xl opacity-40 animate-wiggle">⭐</span>
+                </div>
+                <div class="relative z-10">
+                <div class="flex flex-wrap justify-between items-center mb-6 pb-4 border-b">
+                    <div>
+                        <h2 class="text-2xl md:text-3xl font-extrabold text-green-900 flex items-center gap-3">
+                            <i class="fa-solid fa-pen-fancy text-green-600"></i> Kuiz Bina Ayat Kata Adjektif Jarak
+                        </h2>
+                        <p class="text-gray-600 font-comic">Bina ayat mudah berdasarkan kata adjektif jarak yang diberi!</p>
+                    </div>
+                    <div id="quiz-progress" class="text-sm bg-green-100 text-green-800 font-bold px-3 py-1.5 rounded-full border border-green-300">
+                        Soalan 1 / 5
+                    </div>
+                </div>
+
+                <!-- Quiz Card Box -->
+                <div id="quiz-card-container">
+                    <!-- Dynamic Quiz Sentence Building Content Rendered by JS -->
+                </div>
+
+                <!-- Quiz Completion Result Screen -->
+                <div id="quiz-result-screen" class="hidden text-center py-8 space-y-6">
+                    <div class="w-24 h-24 bg-yellow-400 text-white rounded-full flex items-center justify-center text-5xl mx-auto shadow-lg animate-bounce">
+                        🏆
+                    </div>
+                    <h3 class="text-3xl font-black text-slate-800">TAHNIAH! KUIZ BINA AYAT SELESAI!</h3>
+                    <p id="quiz-final-motivation" class="text-lg text-purple-700 font-bold font-comic">Awak memang pakar membina ayat yang hebat dan bijak!</p>
+                    
+                    <div class="bg-gradient-to-r from-yellow-100 via-orange-100 to-yellow-100 max-w-md mx-auto p-6 rounded-3xl border-2 border-yellow-300 shadow-sm">
+                        <div class="text-sm text-gray-600 font-bold uppercase tracking-wider mb-1">Jumlah Markah Anda</div>
+                        <div id="quiz-score-display" class="text-5xl font-black text-orange-600">100%</div>
+                        <p id="quiz-score-detail" class="text-xs text-gray-500 mt-2">Menjawab 5 daripada 5 binaan ayat dengan tepat.</p>
+                    </div>
+
+                    <!-- Motivational Action Buttons -->
+                    <div class="flex flex-wrap justify-center gap-4 pt-4">
+                        <button onclick="restartQuiz()" class="bg-blue-600 hover:bg-blue-700 text-white font-bold px-6 py-3 rounded-2xl shadow-md btn-bounce flex items-center gap-2">
+                            <i class="fa-solid fa-rotate-right"></i> Mahu Main Lagi! 🎮
+                        </button>
+                        <button onclick="switchTab('guru')" class="bg-pink-600 hover:bg-pink-700 text-white font-bold px-6 py-3 rounded-2xl shadow-md btn-bounce flex items-center gap-2">
+                            <i class="fa-solid fa-heart"></i> Hantar Ke Komen Guru ⭐
+                        </button>
+                        <button onclick="triggerMotivationPopup()" class="bg-yellow-500 hover:bg-yellow-600 text-slate-900 font-bold px-6 py-3 rounded-2xl shadow-md btn-bounce flex items-center gap-2">
+                            <i class="fa-solid fa-bolt"></i> Saya Mahu Buat Yang Terbaik! 💪
+                        </button>
+                    </div>
+                </div>
+
+                </div>
+            </div>
+        </section>
+
+        <!-- VIEW 4: RUANG MAKLUM BALAS & KOMEN GURU -->
+        <section id="view-guru" class="space-y-6 hidden">
+            <div class="relative overflow-hidden bg-gradient-to-br from-pink-100 via-white to-orange-100 rounded-3xl p-6 shadow-lg border-4 border-pink-400">
+                <div class="absolute inset-0 pointer-events-none select-none overflow-hidden z-0" aria-hidden="true">
+                    <span class="absolute top-3 right-4 text-5xl opacity-50 animate-float">👩‍🏫</span>
+                    <span class="absolute top-1/3 -right-2 text-4xl opacity-40 animate-heartbeat">💖</span>
+                    <span class="absolute bottom-4 right-6 text-5xl opacity-50 animate-wiggle">🏅</span>
+                    <span class="absolute bottom-3 left-4 text-4xl opacity-50 animate-float">🍎</span>
+                    <span class="absolute top-2/3 -left-2 text-4xl opacity-40 animate-heartbeat">💌</span>
+                    <span class="absolute top-3 left-1/2 text-3xl opacity-40 animate-wiggle">🌟</span>
+                </div>
+                <div class="relative z-10">
+                <div class="flex justify-between items-center mb-6 pb-4 border-b">
+                    <div>
+                        <h2 class="text-2xl md:text-3xl font-extrabold text-pink-900 flex items-center gap-3">
+                            <i class="fa-solid fa-heart text-pink-500"></i> Ruang Maklum Balas & Komen Guru
+                        </h2>
+                        <p class="text-gray-600 font-comic">Guru dan ibu bapa boleh memberikan maklum balas serta lencana motivasi di sini.</p>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <!-- Student Summary Card -->
+                    <div class="bg-pink-50 p-6 rounded-2xl border-2 border-pink-200 space-y-4">
+                        <h3 class="font-bold text-lg text-pink-900 flex items-center gap-2">
+                            <i class="fa-solid fa-user-graduate"></i> Ringkasan Pencapaian Murid
+                        </h3>
+                        <div class="space-y-2 text-sm text-gray-700 font-comic">
+                            <div class="flex justify-between bg-white p-3 rounded-xl border">
+                                <span>Status Permainan Jarak:</span>
+                                <strong id="summary-game-status" class="text-purple-600">Aktif Mencuba</strong>
+                            </div>
+                            <div class="flex justify-between bg-white p-3 rounded-xl border">
+                                <span>Markah Kuiz Tertinggi:</span>
+                                <strong id="summary-quiz-score" class="text-green-600">Belum Selesai</strong>
+                            </div>
+                            <div class="flex justify-between bg-white p-3 rounded-xl border">
+                                <span>Lencana Dikumpul:</span>
+                                <strong id="summary-badge" class="text-yellow-600">⭐ Bintang Adjektif Jarak</strong>
+                            </div>
+                        </div>
+
+                        <div class="p-4 bg-yellow-100 rounded-2xl border border-yellow-300 text-center">
+                            <div class="text-3xl mb-1">🌟🌟🌟🌟🌟</div>
+                            <p class="text-xs text-yellow-900 font-bold">"Murid Pendidikan Inklusif ini menunjukkan pemahaman kata adjektif jarak yang sangat tinggi!"</p>
+                        </div>
+                    </div>
+
+                    <!-- Teacher Input Form -->
+                    <div class="bg-white p-6 rounded-2xl border-2 border-gray-200 shadow-sm space-y-4">
+                        <h3 class="font-bold text-lg text-gray-800 flex items-center gap-2">
+                            <i class="fa-solid fa-pen-to-square text-blue-500"></i> Tambah Ulasan Motivasi Guru
+                        </h3>
+                        <div>
+                            <label class="block text-xs font-bold text-gray-600 mb-1">Nama Guru / Ibu Bapa:</label>
+                            <input type="text" id="teacher-name" value="Cikgu Sarah" class="w-full p-3 rounded-xl border-2 border-gray-200 focus:border-blue-500 font-comic">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-gray-600 mb-1">Catatan Maklum Balas Positif:</label>
+                            <textarea id="teacher-comment" rows="3" class="w-full p-3 rounded-xl border-2 border-gray-200 focus:border-blue-500 font-comic" placeholder="Tuliskan kata-kata semangat..."></textarea>
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-gray-600 mb-1">Pilih Lencana Ganjaran:</label>
+                            <select id="teacher-badge-select" class="w-full p-3 rounded-xl border-2 border-gray-200 font-comic">
+                                <option value="🥇 Pakar Jarak Terbilang">🥇 Pakar Jarak Terbilang</option>
+                                <option value="⭐ Bintang Adjektif Jarak">⭐ Bintang Adjektif Jarak</option>
+                                <option value="🚀 Juara Teka Jarak">🚀 Juara Teka Jarak</option>
+                            </select>
+                        </div>
+                        <button onclick="saveTeacherComment()" class="w-full bg-pink-600 hover:bg-pink-700 text-white font-bold py-3 rounded-xl shadow btn-bounce flex items-center justify-center gap-2">
+                            <i class="fa-solid fa-paper-plane"></i> Simpan Maklum Balas Guru
+                        </button>
+                    </div>
+                </div>
+
+                <!-- List of Displayed Comments -->
+                <div class="mt-6 pt-6 border-t">
+                    <h3 class="font-bold text-lg text-gray-800 mb-4 flex items-center gap-2">
+                        <i class="fa-solid fa-comments text-pink-500"></i> Senarai Maklum Balas Guru:
+                    </h3>
+                    <div id="comments-list" class="space-y-3">
+                        <div class="bg-pink-50 p-4 rounded-2xl border border-pink-200">
+                            <div class="flex justify-between items-center text-sm font-bold text-pink-900 mb-1">
+                                <span>Cikgu Ainna (Guru Bahasa Melayu)</span>
+                                <span class="bg-pink-200 text-pink-800 text-xs px-2 py-0.5 rounded-full">🥇 Pakar Jarak</span>
+                            </div>
+                            <p class="text-sm text-gray-700 font-comic">"Syabas! Sangat cemerlang mengecam Kata Adjektif Jarak dan padanan Teka Jarak. Teruskan usaha!"</p>
+                        </div>
+                    </div>
+                </div>
+
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Modal Popups: Cara Bermain Popup -->
+    <div id="cara-bermain-modal" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center hidden p-4">
+        <div class="bg-white rounded-3xl p-6 md:p-8 max-w-xl w-full space-y-4 border-4 border-blue-400 shadow-2xl relative custom-scrollbar max-h-[90vh] overflow-y-auto">
+            <button onclick="closeCaraBermainModal()" class="absolute top-4 right-4 bg-gray-200 hover:bg-gray-300 text-gray-800 rounded-full w-10 h-10 flex items-center justify-center font-bold text-lg">
+                ✕
+            </button>
+            <div class="flex items-center gap-3 border-b pb-3">
+                <div class="w-12 h-12 bg-blue-500 text-white rounded-2xl flex items-center justify-center text-2xl font-bold shadow">
+                    ❓
+                </div>
+                <div>
+                    <h3 class="text-2xl font-black text-blue-900">Cara Bermain & Panduan Aplikasi</h3>
+                    <p class="text-xs text-gray-500 font-comic">Aplikasi Pembelajaran Pendidikan Inklusif Tahun 3</p>
+                </div>
+            </div>
+
+            <div class="space-y-4 text-slate-700 font-comic text-sm">
+                <div class="bg-blue-50 p-4 rounded-2xl border-l-4 border-blue-500 space-y-1">
+                    <h4 class="font-bold text-blue-900 text-base">1. Baca Nota & Animasi</h4>
+                    <p>Mulakan pembelajaran dengan membaca nota pada bahagian<strong>"1. Nota & Animasi"</strong>. Tekan kad jarak untuk mendengar sebutan dan melihat emoji bergerak.</p>
+                </div>
+
+                <div class="bg-purple-50 p-4 rounded-2xl border-l-4 border-purple-500 space-y-1">
+                    <h4 class="font-bold text-purple-900 text-base">2. Terokai Zon Permainan</h4>
+                    <p>Main 3 permainan menyeronokkan pada bahagian <strong>"2. Zon Permainan"</strong>:</p>
+                    <ul class="list-disc list-inside text-xs space-y-1 pl-2">
+                        <li><strong>Pecah Belon:</strong> Ketuk belon kata adjektif jarak.</li>
+                        <li><strong>Katak Melompat:</strong> Klik Kata Adjektif Jarak yang tepat.</li>
+                        <li><strong>Teka Jarak:</strong> Pilih peti jarak yang sesuai dengan situasi.</li>
+                    </ul>
+                </div>
+
+                <div class="bg-green-50 p-4 rounded-2xl border-l-4 border-green-500 space-y-1">
+                    <h4 class="font-bold text-green-900 text-base">3. Kuiz Uji Diri (Bina Ayat)</h4>
+                    <p>Uji kemahiran tatabahasa pada bahagian <strong>"3. Kuiz Uji Diri"</strong> dengan membina ayat mudah menggunakan kata adjektif jarak yang diberi.</p>
+                </div>
+
+                <div class="bg-pink-50 p-4 rounded-2xl border-l-4 border-pink-500 space-y-1">
+                    <h4 class="font-bold text-pink-900 text-base">4. Komen Guru & Motivasi</h4>
+                    <p>Dapatkan sokongan, kumpul lencana daripada guru / ibu bapa, dan sentiasa lakukan yang terbaik!</p>
+                </div>
+            </div>
+
+            <button onclick="closeCaraBermainModal()" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 rounded-2xl shadow btn-bounce">
+                🚀 Saya Dah Faham! Jom Bermain!
+            </button>
+        </div>
+    </div>
+
+    <!-- Modal Popups for Custom Feedback / Motivation -->
+    <div id="motivation-modal" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center hidden p-4">
+        <div class="bg-white rounded-3xl p-6 md:p-8 max-w-md w-full text-center space-y-4 border-4 border-yellow-400 shadow-2xl">
+            <div class="text-6xl animate-bounce">🌟</div>
+            <h3 class="text-2xl font-black text-slate-800">SAYA MAHU BUAT YANG TERBAIK!</h3>
+            <p class="text-gray-600 font-comic text-sm">
+                Setiap usaha meneroka jarak dan bahasa menjadikan awak lebih pandai. Teruskan belajar dan buat yang terbaik!
+            </p>
+            <button onclick="closeMotivationModal()" class="w-full bg-yellow-400 hover:bg-yellow-300 text-slate-900 font-black py-3 rounded-2xl shadow btn-bounce">
+                🚀 SAYA BUKTIKAN KEMAMPUAN SAYA!
+            </button>
+        </div>
+    </div>
+
+    <!-- Accessible Friendly Footer -->
+    <footer class="bg-gradient-to-r from-fuchsia-600 via-purple-600 to-sky-600 text-white py-6 text-center text-xs font-comic mt-10">
+        <div class="max-w-7xl mx-auto px-4 space-y-2">
+            <p><strong>Teroka Kata Adjektif Jarak Interaktif</strong> — Aplikasi Permainan Pendidikan Inklusif Tahun 3.</p>
+            <p class="text-yellow-200"> • Disediakan oleh Cikgu Ainna (Guru Bahasa Melayu) • </p>
+        </div>
+    </footer>
+
+    <script>
+        // DATA SETS FOR KATA ADJEKTIF JARAK VS DISTRACTORS (PERASAAN & PANCAINDERA)
+        const KATA_ADJEKTIF_JARAK_LIST = [
+            'Jauh', 'Dekat', 'Hampir', 'Rapat', 'Renggang', 'Jarang'
+        ];
+
+        // Distractors: Perasaan & Pancaindera
+        const DISTRACTOR_ADJEKTIF_LIST = [
+            'Gembira', 'Sedih', 'Marah', 'Takut',
+            'Manis', 'Wangi', 'Bising', 'Kasar', 'Tawar', 'Harum', 'Halus', 'Pahit'
+        ];
+
+        // FROGGY JUMP QUESTIONS DATASET
+        const FROGGY_QUESTIONS = [
+            {
+                id: 1,
+                ayat: "Rumah Ali ________ dengan sekolah, hanya lima minit berjalan kaki.",
+                options: [
+                    { label: "dekat", correct: true },
+                    { label: "jauh", correct: false },
+                    { label: "tinggi", correct: false }
+                ]
+            },
+            {
+                id: 2,
+                ayat: "Kampung nenek sangat ________ kerana kami memandu selama lima jam.",
+                options: [
+                    { label: "hampir", correct: false },
+                    { label: "dekat", correct: false },
+                    { label: "jauh", correct: true }
+                ]
+            },
+            {
+                id: 3,
+                ayat: "Murid-murid duduk ________ di dalam bilik yang sempit itu.",
+                options: [
+                    { label: "renggang", correct: false },
+                    { label: "rapat", correct: true },
+                    { label: "jauh", correct: false }
+                ]
+            },
+            {
+                id: 4,
+                ayat: "Pokok-pokok getah itu ditanam ________ kerana ruang di antaranya luas.",
+                options: [
+                    { label: "renggang", correct: true },
+                    { label: "rapat", correct: false },
+                    { label: "hampir", correct: false }
+                ]
+            }
+        ];
+
+        // 5 POSMEN JARAK QUESTIONS (Sorting Game)
+        const POSMEN_QUESTIONS = [
+            {
+                id: 1,
+                situasi: "Rumah Amir di sebelah rumah Ali. Mereka hanya berjalan beberapa langkah.",
+                emoji: "🏠🏠🚶",
+                options: [
+                    { label: "Dekat", emoji: "🏠", correct: true },
+                    { label: "Jauh", emoji: "✈️", correct: false },
+                    { label: "Renggang", emoji: "🌳", correct: false }
+                ]
+            },
+            {
+                id: 2,
+                situasi: "Aisyah pergi ke rumah datuknya di Sabah dengan menaiki kapal terbang.",
+                emoji: "✈️🌏🏔️",
+                options: [
+                    { label: "Dekat", emoji: "🏠", correct: false },
+                    { label: "Jauh", emoji: "✈️", correct: true },
+                    { label: "Rapat", emoji: "👫", correct: false }
+                ]
+            },
+            {
+                id: 3,
+                situasi: "Murid-murid duduk sangat sempit tanpa ruang di antara mereka.",
+                emoji: "👫👫👫",
+                options: [
+                    { label: "Renggang", emoji: "🌳", correct: false },
+                    { label: "Rapat", emoji: "👫", correct: true },
+                    { label: "Jauh", emoji: "✈️", correct: false }
+                ]
+            },
+            {
+                id: 4,
+                situasi: "Pokok-pokok di dusun ditanam dengan ruang yang luas antara satu pokok dengan pokok yang lain.",
+                emoji: "🌳 🌳 🌳",
+                options: [
+                    { label: "Rapat", emoji: "👫", correct: false },
+                    { label: "Renggang", emoji: "🌳", correct: true },
+                    { label: "Dekat", emoji: "🏠", correct: false }
+                ]
+            },
+            {
+                id: 5,
+                situasi: "Hafiz hanya tinggal beberapa langkah lagi untuk sampai ke garisan penamat.",
+                emoji: "🏃🏁",
+                options: [
+                    { label: "Hampir", emoji: "🏁", correct: true },
+                    { label: "Jauh", emoji: "✈️", correct: false },
+                    { label: "Rapat", emoji: "👫", correct: false }
+                ]
+            }
+        ];
+
+        // SENTENCE BUILDING QUIZ DATASET
+        const BINA_AYAT_QUIZ_DATA = [
+            {
+                word: "jauh",
+                emoji: "🏔️",
+                hint: "Contoh: Rumah datuk saya jauh di kampung.",
+                sample: "Sekolah nenek saya jauh dari bandar."
+            },
+            {
+                word: "dekat",
+                emoji: "🏠",
+                hint: "Contoh: Rumah saya dekat dengan sekolah.",
+                sample: "Rumah saya dekat dengan taman permainan."
+            },
+            {
+                word: "hampir",
+                emoji: "🏁",
+                hint: "Contoh: Kami hampir sampai ke rumah nenek.",
+                sample: "Adik hampir sampai ke garisan penamat."
+            },
+            {
+                word: "rapat",
+                emoji: "👫",
+                hint: "Contoh: Murid-murid duduk rapat di atas tikar.",
+                sample: "Kami duduk rapat semasa mendengar cerita."
+            },
+            {
+                word: "renggang",
+                emoji: "🌳",
+                hint: "Contoh: Pokok getah itu ditanam renggang.",
+                sample: "Pokok-pokok di dusun itu ditanam renggang."
+            }
+        ];
+
+        // THEMED BACKGROUNDS FOR EACH GAME
+        const STAGE_SCENES = {
+            belon: `
+                <div class="stage-item text-7xl animate-wiggle" style="top:14%;right:5%;">☀️</div>
+                <div class="stage-item text-6xl" style="top:16%;animation:cloudDrift 38s linear infinite;">☁️</div>
+                <div class="stage-item text-5xl" style="top:34%;animation:cloudDrift 52s linear infinite;animation-delay:-20s;">☁️</div>
+                <div class="stage-item text-4xl" style="top:8%;animation:cloudDrift 64s linear infinite;animation-delay:-40s;">☁️</div>
+                <div class="stage-item text-7xl" style="bottom:70px;left:3%;">🌈</div>
+                <div class="stage-item text-3xl animate-float" style="top:55%;left:22%;">🦋</div>
+                <div class="stage-item text-3xl animate-float" style="top:62%;right:14%;">🐦</div>
+                <svg viewBox="0 0 800 120" preserveAspectRatio="none" class="absolute bottom-0 left-0 w-full h-28">
+                    <path d="M0,70 Q150,10 300,60 T600,50 T800,70 L800,120 L0,120Z" fill="#8BE66B"/>
+                    <path d="M0,98 Q200,55 400,92 T800,88 L800,120 L0,120Z" fill="#43C06B"/>
+                </svg>
+                <div class="stage-item text-3xl" style="bottom:52px;left:14%;">🌼</div>
+                <div class="stage-item text-3xl" style="bottom:46px;left:38%;">🌷</div>
+                <div class="stage-item text-3xl" style="bottom:54px;left:62%;">🌻</div>
+                <div class="stage-item text-3xl" style="bottom:46px;left:84%;">🌸</div>
+            `,
+            katak: `
+                <div class="stage-item text-6xl animate-wiggle" style="top:6%;right:6%;">☀️</div>
+                <div class="stage-item text-5xl" style="top:8%;animation:cloudDrift 55s linear infinite;">☁️</div>
+                <svg viewBox="0 0 800 24" preserveAspectRatio="none" class="absolute left-0 w-full" style="top:calc(27% - 10px);height:22px;">
+                    <path d="M0,12 Q50,0 100,12 T200,12 T300,12 T400,12 T500,12 T600,12 T700,12 T800,12 V24 H0Z" fill="#26C6DA"/>
+                </svg>
+                <div class="stage-item text-5xl animate-wiggle" style="top:12%;left:3%;">🌾</div>
+                <div class="stage-item text-5xl animate-wiggle" style="top:12%;right:18%;">🌾</div>
+                <div class="stage-item text-3xl animate-float" style="top:6%;left:35%;">🦋</div>
+                <div class="stage-item text-3xl" style="top:40%;animation:cloudDrift 26s linear infinite;">🐟</div>
+                <div class="stage-item text-3xl" style="top:60%;animation:cloudDriftRev 34s linear infinite;animation-delay:-10s;">🐠</div>
+                <div class="stage-item text-3xl" style="top:78%;animation:cloudDrift 40s linear infinite;animation-delay:-25s;">🐟</div>
+                <div class="stage-item text-4xl animate-leaf-float" style="top:44%;left:6%;">🪷</div>
+                <div class="stage-item text-4xl animate-leaf-float" style="top:70%;right:6%;">🪷</div>
+                <div class="stage-item text-4xl animate-leaf-float" style="top:52%;right:22%;">🪷</div>
+                <div class="stage-item text-2xl" style="bottom:90px;left:20%;animation:bubbleUp 4s ease-in infinite;">🫧</div>
+                <div class="stage-item text-2xl" style="bottom:80px;left:55%;animation:bubbleUp 5s ease-in infinite;animation-delay:-2s;">🫧</div>
+                <div class="stage-item text-2xl" style="bottom:90px;left:80%;animation:bubbleUp 4.5s ease-in infinite;animation-delay:-1s;">🫧</div>
+            `,
+            posmen: `
+                <div class="stage-item text-7xl animate-float" style="top:15%;left:5%;">🌅</div>
+                <div class="stage-item text-5xl" style="top:18%;animation:cloudDrift 45s linear infinite;">☁️</div>
+                <div class="stage-item text-4xl" style="top:34%;animation:cloudDrift 60s linear infinite;animation-delay:-30s;">☁️</div>
+                <div class="stage-item text-3xl animate-float" style="top:24%;right:10%;">🐦</div>
+                <div class="absolute inset-x-0 flex justify-around items-end text-5xl md:text-6xl" style="bottom:70px;">
+                    <span>🏠</span><span>🌳</span><span>🏡</span><span>🏫</span><span>🌳</span><span>🏘️</span><span>🏠</span>
+                </div>
+                <div class="absolute inset-x-0 bottom-0 h-16 bg-slate-500">
+                    <div class="absolute inset-x-0 top-1/2 border-t-4 border-dashed border-yellow-300"></div>
+                </div>
+                <div class="stage-item text-4xl" style="bottom:70px;right:4%;">📮</div>
+                <div class="stage-item text-4xl" style="bottom:8px;animation:cloudDriftRev 20s linear infinite;">🚚</div>
+            `
+        };
+
+        function applyStageTheme(game) {
+            const stage = document.getElementById('game-stage');
+            const bg = document.getElementById('stage-bg');
+            if (!stage || !bg) return;
+            stage.classList.remove('stage-belon', 'stage-katak', 'stage-posmen');
+            stage.classList.add('stage-' + game);
+            bg.innerHTML = STAGE_SCENES[game] || '';
+        }
+
+        // Global State Variables
+        let currentTab = 'hub';
+        let globalScore = 0;
+        let currentGame = 'belon'; // 'belon', 'katak', 'posmen'
+        let currentGameScore = 0;
+        let isGameRunning = false;
+
+        let froggyIndex = 0;
+        let posmenIndex = 0;
+        let currentQuizIndex = 0;
+        let quizScore = 0;
+
+        // Web Audio API Synthesizer for rich audio without external assets
+        const AudioCtx = window.AudioContext || window.webkitAudioContext;
+        let audioCtxInstance = null;
+
+        function getAudioContext() {
+            if (!audioCtxInstance) {
+                audioCtxInstance = new AudioCtx();
+            }
+            if (audioCtxInstance.state === 'suspended') {
+                audioCtxInstance.resume();
+            }
+            return audioCtxInstance;
+        }
+
+        function playPopSound() {
+            try {
+                const ctx = getAudioContext();
+                const osc = ctx.createOscillator();
+                const gain = ctx.createGain();
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(600, ctx.currentTime);
+                osc.frequency.exponentialRampToValueAtTime(150, ctx.currentTime + 0.1);
+                gain.gain.setValueAtTime(1, ctx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.1);
+                osc.connect(gain);
+                gain.connect(ctx.destination);
+                osc.start();
+                osc.stop(ctx.currentTime + 0.1);
+            } catch (e) { console.log(e); }
+        }
+
+        function playWrongSound() {
+            try {
+                const ctx = getAudioContext();
+                const osc = ctx.createOscillator();
+                const gain = ctx.createGain();
+                osc.type = 'sawtooth';
+                osc.frequency.setValueAtTime(180, ctx.currentTime);
+                osc.frequency.linearRampToValueAtTime(110, ctx.currentTime + 0.25);
+                gain.gain.setValueAtTime(0.5, ctx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.25);
+                osc.connect(gain);
+                gain.connect(ctx.destination);
+                osc.start();
+                osc.stop(ctx.currentTime + 0.25);
+            } catch (e) { console.log(e); }
+        }
+
+        function playSuccessChime() {
+            try {
+                const ctx = getAudioContext();
+                const notes = [523.25, 659.25, 783.99, 1046.50]; // C5, E5, G5, C6
+                notes.forEach((freq, i) => {
+                    const osc = ctx.createOscillator();
+                    const gain = ctx.createGain();
+                    osc.type = 'sine';
+                    osc.frequency.setValueAtTime(freq, ctx.currentTime + i * 0.08);
+                    gain.gain.setValueAtTime(0.4, ctx.currentTime + i * 0.08);
+                    gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + i * 0.08 + 0.2);
+                    osc.connect(gain);
+                    gain.connect(ctx.destination);
+                    osc.start(ctx.currentTime + i * 0.08);
+                    osc.stop(ctx.currentTime + i * 0.08 + 0.2);
+                });
+            } catch (e) { console.log(e); }
+        }
+
+        // ---- FEMALE VOICE (Suara Perempuan) ----
+        let cachedVoices = [];
+        function loadVoices() {
+            if ('speechSynthesis' in window) {
+                cachedVoices = window.speechSynthesis.getVoices() || [];
+            }
+        }
+        if ('speechSynthesis' in window) {
+            loadVoices();
+            window.speechSynthesis.onvoiceschanged = loadVoices;
+        }
+
+        const FEMALE_VOICE_HINTS = ['yasmin', 'amira', 'siti', 'aisyah', 'damayanti', 'gadis', 'female', 'wanita', 'perempuan', 'zira', 'sari'];
+        const MALE_VOICE_HINTS = /(^|[^a-z])male|osman|ardi|rizwan|lelaki|lelaki|david|mark|george|daniel|rishi/;
+
+        function pickFemaleVoice() {
+            const voices = cachedVoices.length ? cachedVoices : window.speechSynthesis.getVoices();
+            const norm = v => v.lang.toLowerCase().replace('_', '-');
+            const nameOf = v => v.name.toLowerCase();
+            const isFemale = v => FEMALE_VOICE_HINTS.some(h => nameOf(v).includes(h));
+            const isMale = v => MALE_VOICE_HINTS.test(nameOf(v)) && !nameOf(v).includes('female');
+            const ms = voices.filter(v => norm(v).startsWith('ms'));
+            const id = voices.filter(v => norm(v).startsWith('id'));
+
+            let v = ms.find(isFemale);
+            if (v) return { voice: v, confirmed: true };
+            v = id.find(isFemale);
+            if (v) return { voice: v, confirmed: true };
+            v = ms.find(x => !isMale(x));
+            if (v) return { voice: v, confirmed: false };
+            v = id.find(x => !isMale(x));
+            if (v) return { voice: v, confirmed: false };
+            return { voice: null, confirmed: false };
+        }
+
+        function speakText(text) {
+            if (!('speechSynthesis' in window)) return;
+            window.speechSynthesis.cancel();
+            const utterance = new SpeechSynthesisUtterance(text);
+            const picked = pickFemaleVoice();
+
+            if (picked.voice) {
+                utterance.voice = picked.voice;
+                utterance.lang = picked.voice.lang;
+            } else {
+                utterance.lang = 'ms-MY';
+            }
+            utterance.rate = 0.88; // Inclusive slow rate for clarity
+            // Raise pitch to sound more feminine when the device has no clearly female voice
+            utterance.pitch = picked.confirmed ? 1.1 : 1.6;
+
+            setTimeout(() => window.speechSynthesis.speak(utterance), 60);
+        }
+
+        function openCaraBermainModal() {
+            document.getElementById('cara-bermain-modal').classList.remove('hidden');
+        }
+
+        function closeCaraBermainModal() {
+            document.getElementById('cara-bermain-modal').classList.add('hidden');
+        }
+
+        function switchTab(tabId) {
+            currentTab = tabId;
+            const views = ['hub', 'nota', 'games', 'kuiz', 'guru'];
+            
+            views.forEach(v => {
+                const el = document.getElementById(`view-${v}`);
+                if (el) {
+                    if (v === tabId) {
+                        el.classList.remove('hidden');
+                    } else {
+                        el.classList.add('hidden');
+                    }
+                }
+            });
+
+            const tabs = ['nota', 'games', 'kuiz', 'guru'];
+            tabs.forEach(t => {
+                const btn = document.getElementById(`tab-${t}`);
+                if (btn) {
+                    if (t === tabId) {
+                        btn.classList.add('ring-4', 'ring-yellow-400');
+                    } else {
+                        btn.classList.remove('ring-4', 'ring-yellow-400');
+                    }
+                }
+            });
+
+            if (tabId === 'kuiz') {
+                renderQuizQuestion();
+            }
+
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function showJarakCategory(catId) {
+            const categories = ['jauhdekat', 'rapat'];
+            categories.forEach(c => {
+                const box = document.getElementById(`jarak-${c}`);
+                const btn = document.getElementById(`btn-jarak-${c}`);
+                if (c === catId) {
+                    box.classList.remove('hidden');
+                    btn.classList.replace('bg-gray-200', 'bg-fuchsia-500');
+                    btn.classList.replace('text-gray-700', 'text-white');
+                } else {
+                    box.classList.add('hidden');
+                    btn.classList.replace('bg-fuchsia-500', 'bg-gray-200');
+                    btn.classList.replace('text-white', 'text-gray-700');
+                }
+            });
+        }
+
+        function playJarakAnimation(feeling, desc, emoji) {
+            speakText(`Kata adjektif jarak: ${feeling}. ${desc}`);
+            confetti({
+                particleCount: 25,
+                spread: 40,
+                origin: { y: 0.6 }
+            });
+        }
+
+        function selectGame(gameType) {
+            currentGame = gameType;
+            applyStageTheme(gameType);
+            const titleEl = document.getElementById('active-game-title');
+            
+            if (gameType === 'belon') {
+                titleEl.textContent = '🎈 Pecah Belon Kata Adjektif Jarak';
+            } else if (gameType === 'katak') {
+                titleEl.textContent = '🐸 Froggy Jumps (Katak Melompat)';
+            } else if (gameType === 'posmen') {
+                titleEl.textContent = '📬 Posmen Jarak (Sorting Mailbox)';
+            }
+
+            stopGame();
+            resetGameArea();
+        }
+
+        function resetGameArea() {
+            const playground = document.getElementById('game-playground');
+            playground.innerHTML = `
+                <div class="text-center space-y-4 bg-slate-900/80 p-6 rounded-3xl border-2 border-yellow-400 max-w-md">
+                    <div class="text-6xl animate-bounce">🎮</div>
+                    <h3 class="text-2xl font-bold text-white">Sedia Untuk Bermain?</h3>
+                    <p class="text-slate-200 font-comic">Tekan butang di bawah untuk memulakan permainan!</p>
+                    <button onclick="startGame()" class="bg-yellow-400 hover:bg-yellow-300 text-slate-900 font-black text-xl px-8 py-3 rounded-2xl shadow-lg border-b-4 border-yellow-600 btn-bounce">
+                        🚀 MULA MAIN SEKARANG!
+                    </button>
+                </div>
+            `;
+            document.getElementById('game-current-score').textContent = '0';
+        }
+
+        function startGame() {
+            if (isGameRunning) return;
+            isGameRunning = true;
+            currentGameScore = 0;
+            froggyIndex = 0;
+            posmenIndex = 0;
+            document.getElementById('game-current-score').textContent = currentGameScore;
+
+            if (currentGame === 'belon') {
+                runBalloonGame();
+            } else if (currentGame === 'katak') {
+                runFroggyGame();
+            } else if (currentGame === 'posmen') {
+                runPosmenGame();
+            }
+        }
+
+        function stopGame() {
+            isGameRunning = false;
+        }
+
+        function runBalloonGame() {
+            const playground = document.getElementById('game-playground');
+            playground.innerHTML = `<div id="balloon-box" class="w-full h-80 relative overflow-hidden"></div>`;
+            
+            const box = document.getElementById('balloon-box');
+
+            function spawnBalloon() {
+                if (!isGameRunning) return;
+
+                const isJarak = Math.random() > 0.4;
+                const wordList = isJarak ? KATA_ADJEKTIF_JARAK_LIST : DISTRACTOR_ADJEKTIF_LIST;
+                const word = wordList[Math.floor(Math.random() * wordList.length)];
+
+                const balloon = document.createElement('div');
+                const leftPos = Math.floor(Math.random() * 75) + 5;
+                const colors = ['bg-pink-500', 'bg-blue-500', 'bg-purple-500', 'bg-emerald-500', 'bg-amber-500'];
+                const randomBg = colors[Math.floor(Math.random() * colors.length)];
+
+                balloon.className = `absolute bottom-0 ${randomBg} text-white font-bold px-4 py-3 rounded-full shadow-lg border-2 border-white cursor-pointer btn-bounce select-none flex items-center justify-center text-sm md:text-base transition-all`;
+                balloon.style.left = `${leftPos}%`;
+                balloon.innerHTML = `🎈 ${word}`;
+
+                let bottomPos = 0;
+                const floatInterval = setInterval(() => {
+                    if (!isGameRunning) {
+                        clearInterval(floatInterval);
+                        balloon.remove();
+                        return;
+                    }
+                    bottomPos += 1.5;
+                    balloon.style.bottom = `${bottomPos}px`;
+
+                    if (bottomPos > 280) {
+                        clearInterval(floatInterval);
+                        balloon.remove();
+                    }
+                }, 30);
+
+                balloon.onclick = () => {
+                    if (isJarak) {
+                        playPopSound();
+                        currentGameScore += 10;
+                        globalScore += 10;
+                        document.getElementById('global-score').textContent = globalScore;
+                        document.getElementById('game-current-score').textContent = currentGameScore;
+                        confetti({ particleCount: 15, spread: 30, origin: { y: 0.5 } });
+                    } else {
+                        playWrongSound();
+                    }
+                    clearInterval(floatInterval);
+                    balloon.remove();
+                };
+
+                box.appendChild(balloon);
+
+                if (isGameRunning) {
+                    setTimeout(spawnBalloon, 1200);
+                }
+            }
+
+            spawnBalloon();
+        }
+
+        function runFroggyGame() {
+            renderFroggyQuestion();
+        }
+
+        function renderFroggyQuestion() {
+            if (!isGameRunning) return;
+
+            const q = FROGGY_QUESTIONS[froggyIndex % FROGGY_QUESTIONS.length];
+            const playground = document.getElementById('game-playground');
+
+            playground.innerHTML = `
+                <div class="w-full h-full flex flex-col justify-between items-center p-2 space-y-4">
+                    
+                    <!-- Question Box -->
+                    <div class="bg-white/95 border-4 border-emerald-500 p-4 rounded-3xl shadow-xl text-center max-w-xl w-full space-y-2">
+                        <span class="text-xs bg-emerald-600 text-white font-bold px-3 py-1 rounded-full uppercase">Soalan ${q.id} daripada ${FROGGY_QUESTIONS.length}</span>
+                        <h4 class="text-lg md:text-2xl font-black text-slate-800 font-comic">${q.ayat}</h4>
+                    </div>
+
+                    <!-- Frog Character Stage -->
+                    <div class="relative w-full flex justify-center items-center py-2">
+                        <div id="frog-character" class="text-6xl md:text-7xl transition-all duration-500 filter drop-shadow-lg">
+                            🐸
+                        </div>
+                    </div>
+
+                    <!-- Lotus Leaves Options -->
+                    <div class="grid grid-cols-3 gap-3 md:gap-6 w-full max-w-xl">
+                        ${q.options.map((opt, idx) => `
+                            <button onclick="handleFroggyJump(this, ${opt.correct}, '${opt.label}')" 
+                                    class="animate-leaf-float bg-emerald-600 hover:bg-emerald-500 text-white font-black text-sm md:text-lg py-4 px-2 rounded-full border-4 border-emerald-300 shadow-xl flex flex-col items-center justify-center btn-bounce transition-all">
+                                <span class="text-2xl mb-1">🪷</span>
+                                <span>${opt.label}</span>
+                            </button>
+                        `).join('')}
+                    </div>
+
+                    <div id="froggy-feedback" class="text-sm font-bold text-slate-900 bg-yellow-300 px-4 py-1.5 rounded-full border border-yellow-500 opacity-0 transition-opacity">
+                        Pilih daun teratai dengan jawapan betul!
+                    </div>
+
+                </div>
+            `;
+        }
+
+        function handleFroggyJump(buttonEl, isCorrect, label) {
+            if (!isGameRunning) return;
+
+            const frog = document.getElementById('frog-character');
+            const feedback = document.getElementById('froggy-feedback');
+
+            frog.classList.add('animate-frog-jump');
+
+            setTimeout(() => {
+                frog.classList.remove('animate-frog-jump');
+            }, 600);
+
+            if (isCorrect) {
+                playSuccessChime();
+                currentGameScore += 20;
+                globalScore += 20;
+                document.getElementById('global-score').textContent = globalScore;
+                document.getElementById('game-current-score').textContent = currentGameScore;
+
+                feedback.textContent = `✨ TEPAT SEKALI! Katak berjaya melompat ke daun [ ${label} ]!`;
+                feedback.className = "text-sm font-bold text-white bg-emerald-600 px-4 py-1.5 rounded-full border border-emerald-300 opacity-100";
+
+                confetti({ particleCount: 30, spread: 50, origin: { y: 0.6 } });
+
+                setTimeout(() => {
+                    froggyIndex++;
+                    if (froggyIndex >= FROGGY_QUESTIONS.length) {
+                        finishFroggyGame();
+                    } else {
+                        renderFroggyQuestion();
+                    }
+                }, 1600);
+            } else {
+                playWrongSound();
+                feedback.textContent = `💡 Cuba lagi! Katak melantun semula. Pilih daun teratai lain!`;
+                feedback.className = "text-sm font-bold text-slate-900 bg-yellow-400 px-4 py-1.5 rounded-full border border-yellow-600 opacity-100";
+            }
+        }
+
+        function finishFroggyGame() {
+            playSuccessChime();
+            confetti({ particleCount: 80, spread: 70, origin: { y: 0.6 } });
+
+            const playground = document.getElementById('game-playground');
+            playground.innerHTML = `
+                <div class="text-center space-y-4 bg-slate-900/90 p-6 rounded-3xl border-4 border-yellow-400 max-w-md">
+                    <div class="text-6xl">🐸🏆</div>
+                    <h3 class="text-2xl font-black text-yellow-400">TAHNIAH! FROGGY JUMPS SELESAI!</h3>
+                    <p class="text-white font-comic text-base">Semua soalan daun teratai berjaya dilompati!</p>
+                    <p class="text-yellow-300 font-bold text-xl">Markah Anda: ${currentGameScore} Mata</p>
+                    <div class="flex flex-col gap-2 pt-2">
+                        <button onclick="startGame()" class="bg-yellow-400 hover:bg-yellow-300 text-slate-900 font-bold py-3 rounded-xl btn-bounce">
+                            🔄 Main Froggy Jumps Lagi
+                        </button>
+                        <button onclick="switchTab('kuiz')" class="bg-green-500 hover:bg-green-400 text-white font-bold py-3 rounded-xl btn-bounce">
+                            ⭐ Teruskan Ke Kuiz Bina Ayat
+                        </button>
+                    </div>
+                </div>
+            `;
+        }
+
+        function runPosmenGame() {
+            renderPosmenQuestion();
+        }
+
+        function renderPosmenQuestion() {
+            if (!isGameRunning) return;
+
+            const q = POSMEN_QUESTIONS[posmenIndex % POSMEN_QUESTIONS.length];
+            const playground = document.getElementById('game-playground');
+
+            playground.innerHTML = `
+                <div class="w-full h-full flex flex-col justify-between items-center p-2 space-y-3">
+                    
+                    <!-- Middle Situation Card -->
+                    <div id="situation-card" class="bg-gradient-to-r from-yellow-300 via-amber-200 to-yellow-300 border-4 border-white p-4 rounded-3xl shadow-xl text-center max-w-lg w-full space-y-2 animate-float flex flex-col items-center">
+                        <div class="flex items-center justify-center gap-2">
+                            <span class="text-3xl">${q.emoji}</span>
+                            <span class="text-xs bg-yellow-600 text-white font-bold px-2.5 py-0.5 rounded-full">Kad Surat Situasi ${q.id}</span>
+                        </div>
+                        ${q.image ? `<img src="${q.image}" alt="Gambar Situasi" class="w-28 h-28 md:w-36 md:h-36 object-cover rounded-2xl shadow-md border-2 border-white my-1">` : ''}
+                        <h4 class="text-lg md:text-xl font-black text-slate-900 font-comic">"${q.situasi}"</h4>
+                    </div>
+
+                    <!-- Bottom Mailboxes -->
+                    <div class="grid grid-cols-3 gap-3 w-full max-w-xl">
+                        ${q.options.map((opt, idx) => `
+                            <button onclick="handlePosmenChoice(${opt.correct}, '${opt.label}')" class="bg-slate-800 hover:bg-slate-700 border-4 ${opt.correct ? 'border-emerald-400' : 'border-purple-400'} rounded-2xl p-3 text-center text-white font-bold shadow-lg btn-bounce space-y-1 flex flex-col items-center justify-center">
+                                <div class="text-4xl animate-bounce">${opt.emoji}</div>
+                                <div class="text-xs md:text-sm font-black text-yellow-300">Peti ${opt.label}</div>
+                            </button>
+                        `).join('')}
+                    </div>
+
+                </div>
+            `;
+        }
+
+        function handlePosmenChoice(isCorrect, label) {
+            if (!isGameRunning) return;
+
+            if (isCorrect) {
+                playSuccessChime();
+                currentGameScore += 25;
+                globalScore += 25;
+                document.getElementById('global-score').textContent = globalScore;
+                document.getElementById('game-current-score').textContent = currentGameScore;
+                confetti({ particleCount: 30, spread: 60, origin: { y: 0.6 } });
+
+                setTimeout(() => {
+                    posmenIndex++;
+                    renderPosmenQuestion();
+                }, 1400);
+            } else {
+                playWrongSound();
+            }
+        }
+
+        function renderQuizQuestion() {
+            const container = document.getElementById('quiz-card-container');
+            const progressEl = document.getElementById('quiz-progress');
+            const resultScreen = document.getElementById('quiz-result-screen');
+
+            if (currentQuizIndex >= BINA_AYAT_QUIZ_DATA.length) {
+                container.classList.add('hidden');
+                resultScreen.classList.remove('hidden');
+                
+                const percentage = Math.round((quizScore / BINA_AYAT_QUIZ_DATA.length) * 100);
+                document.getElementById('quiz-score-display').textContent = `${percentage}%`;
+                document.getElementById('quiz-score-detail').textContent = `Menjawab ${quizScore} daripada ${BINA_AYAT_QUIZ_DATA.length} soalan bina ayat dengan tepat.`;
+                document.getElementById('summary-quiz-score').textContent = `${percentage}% (${quizScore}/${BINA_AYAT_QUIZ_DATA.length})`;
+
+                speakText("Tahniah! Kuiz Bina Ayat selesai!");
+                return;
+            }
+
+            container.classList.remove('hidden');
+            resultScreen.classList.add('hidden');
+
+            const q = BINA_AYAT_QUIZ_DATA[currentQuizIndex];
+            progressEl.textContent = `Soalan ${currentQuizIndex + 1} / ${BINA_AYAT_QUIZ_DATA.length}`;
+
+            container.innerHTML = `
+                <div class="space-y-6">
+                    <div class="bg-lime-100 p-6 rounded-2xl border-4 border-lime-400 text-center sm:text-left flex flex-col sm:flex-row items-center gap-4">
+                        ${q.image ? `
+                            <img src="${q.image}" alt="${q.word}" class="w-24 h-24 md:w-28 md:h-28 object-cover rounded-2xl shadow-md border-2 border-green-300 bg-white">
+                        ` : `
+                            <div class="text-6xl p-3 bg-white rounded-2xl shadow border border-green-200">
+                                ${q.emoji}
+                            </div>
+                        `}
+                        <div class="space-y-1">
+                            <span class="text-xs bg-green-200 text-green-900 font-bold px-3 py-1 rounded-full uppercase">Bina Ayat Mudah</span>
+                            <h3 class="text-2xl md:text-3xl font-black text-green-900">Kata Adjektif Jarak: <span class="underline text-emerald-600">${q.word}</span></h3>
+                            <p class="text-sm text-gray-600 font-comic">💡 ${q.hint}</p>
+                        </div>
+                    </div>
+
+                    <div class="space-y-3">
+                        <label class="block font-bold text-gray-800 text-base">Tuliskan ayat mudah anda di dalam ruang di bawah:</label>
+                        <textarea id="user-sentence-input" rows="3" class="w-full p-4 rounded-2xl border-2 border-gray-300 focus:border-green-500 font-comic text-lg text-slate-800 shadow-inner" placeholder="Taip ayat anda di sini... Gunakan perkataan: ${q.word}"></textarea>
+                        
+                        <div class="flex flex-wrap gap-3">
+                            <button onclick="checkSentenceAnswer()" class="bg-emerald-600 hover:bg-emerald-700 text-white font-bold px-8 py-3 rounded-2xl text-lg shadow btn-bounce flex items-center gap-2">
+                                <i class="fa-solid fa-circle-check"></i> Semak Ayat Saya
+                            </button>
+                            <button onclick="fillSampleSentence()" class="bg-yellow-100 hover:bg-yellow-200 text-yellow-800 font-bold px-4 py-3 rounded-2xl text-sm border border-yellow-300 btn-bounce">
+                                💡 Beri Contoh Jawapan
+                            </button>
+                        </div>
+                    </div>
+
+                    <div id="quiz-explanation-box" class="hidden p-4 rounded-2xl text-base font-comic">
+                    </div>
+                </div>
+            `;
+        }
+
+        function fillSampleSentence() {
+            const q = BINA_AYAT_QUIZ_DATA[currentQuizIndex];
+            const input = document.getElementById('user-sentence-input');
+            input.value = q.sample;
+        }
+
+        function checkSentenceAnswer() {
+            const q = BINA_AYAT_QUIZ_DATA[currentQuizIndex];
+            const inputVal = document.getElementById('user-sentence-input').value.trim();
+            const explanationBox = document.getElementById('quiz-explanation-box');
+
+            if (!inputVal || inputVal.length < 5) {
+                explanationBox.innerHTML = `⚠️ Sila tuliskan ayat mudah yang lengkap sekurang-kurangnya 2 atau 3 perkataan!`;
+                explanationBox.className = "p-4 bg-yellow-100 border-2 border-yellow-400 rounded-2xl text-yellow-900 text-sm font-comic";
+                explanationBox.classList.remove('hidden');
+                return;
+            }
+
+            const containsKeyword = inputVal.toLowerCase().includes(q.word.toLowerCase());
+
+            if (containsKeyword) {
+                quizScore++;
+                playSuccessChime();
+                speakText("Tahniah! Ayat anda betul dan sangat bagus!");
+                confetti({ particleCount: 35, spread: 60, origin: { y: 0.6 } });
+
+                explanationBox.innerHTML = `🎉 <strong>TAHNIAH! AYAT ANDA BETUL!</strong><br>Syabas kerana menggunakan kata adjektif jarak <strong>"${q.word}"</strong> dengan tepat!`;
+                explanationBox.className = "p-4 bg-green-100 border-2 border-green-500 rounded-2xl text-green-900 text-base font-bold font-comic shadow";
+                explanationBox.classList.remove('hidden');
+
+                setTimeout(() => {
+                    currentQuizIndex++;
+                    renderQuizQuestion();
+                }, 2500);
+            } else {
+                playWrongSound();
+                explanationBox.innerHTML = `💡 Ayat anda hampir bagus! Sila pastikan perkataan <strong>"${q.word}"</strong> ada di dalam ayat anda.`;
+                explanationBox.className = "p-4 bg-orange-100 border-2 border-orange-400 rounded-2xl text-orange-900 text-sm font-comic";
+                explanationBox.classList.remove('hidden');
+            }
+        }
+
+        function restartQuiz() {
+            currentQuizIndex = 0;
+            quizScore = 0;
+            renderQuizQuestion();
+        }
+
+        function saveTeacherComment() {
+            const name = document.getElementById('teacher-name').value || 'Guru';
+            const comment = document.getElementById('teacher-comment').value || 'Syabas dan teruskan berusaha!';
+            const badge = document.getElementById('teacher-badge-select').value;
+
+            const list = document.getElementById('comments-list');
+            const item = document.createElement('div');
+            item.className = "bg-pink-50 p-4 rounded-2xl border border-pink-200 animate-bounce-short";
+            item.innerHTML = `
+                <div class="flex justify-between items-center text-sm font-bold text-pink-900 mb-1">
+                    <span>${name}</span>
+                    <span class="bg-pink-200 text-pink-800 text-xs px-2 py-0.5 rounded-full">${badge}</span>
+                </div>
+                <p class="text-sm text-gray-700 font-comic">"${comment}"</p>
+            `;
+            list.prepend(item);
+
+            document.getElementById('teacher-comment').value = '';
+            speakText("Maklum balas guru telah berjaya disimpan!");
+        }
+
+        function triggerMotivationPopup() {
+            const modal = document.getElementById('motivation-modal');
+            modal.classList.remove('hidden');
+            speakText("Saya mahu buat yang terbaik! Awak boleh lakukannya!");
+        }
+
+        function closeMotivationModal() {
+            document.getElementById('motivation-modal').classList.add('hidden');
+        }
+
+        window.onload = function() {
+            applyStageTheme('belon');
+            switchTab('hub');
+        }
+    </script>
+</body>
+</html>
